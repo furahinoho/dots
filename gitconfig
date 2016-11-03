@@ -1,0 +1,99 @@
+[alias] 
+	st = status
+	df = diff
+	dc = diff --cached
+	dfw = diff --color-words
+	dcw = diff --cached --color-words
+	dfs = diff --stat --coror
+	dcs = diff --stat --cached --coror
+	ci = commit
+	cmam = commit -a -m
+	cma = commit --amend -C HEAD
+	co = checkout
+	br = branch
+	lg = log --oneline
+	lgg = log --graph --date=iso --pretty=format:'%Cgreen%h %cd %Cblue%cn %Creset%s' # simple graph
+	tagm = tag -a
+	ls = ls-files
+	export-all =  "!$SHELL -c ' \n\
+					cnt=1 \n\
+					git log --format=%h --reverse |while read h; do \n\
+													git archive --format=tar --prefix=$(printf %03d-%s/ $cnt $h) $h |tar -C ../hoge -xf - \n\
+													cnt=`expr $cnt + 1` \n\
+													done \n\
+					' __dummy__"
+
+	export-allzip =  "!$SHELL -c ' \n\
+					cnt=1 \n\
+					git log --format=%h --reverse |while read h; do \n\
+													 name=$(printf %03d-%s $cnt $h) \n\
+													git archive --format=zip --prefix=${name}/ $h > ../hoge/${name}.zip \n\
+													cnt=`expr $cnt + 1` \n\
+													done \n\
+					' __dummy__"
+
+# original subcommand template
+#	my-subcommand = "!$SHELL -c 'a short shell script' __dummy__"
+
+	# https://github.com/gggritso/dotfiles/blob/master/gitconfig.symlink
+	unstage = reset -q HEAD --
+	discard = checkout --
+	nevermind = !git reset --hard HEAD && git clean -d -f
+	uncommit = reset --mixed HEAD~
+	save = commit -m
+	resave = commit --amend
+	invert = revert
+	last = log -1 HEAD --format=format:"%Cred%H"
+	summary = status -u -s
+	graph = log --graph -10 --branches --remotes --tags  --format=format:'%Cgreen%h %Creset• %<(75,trunc)%s (%cN, %ar) %Cred%d' --date-order
+	history = log -10 --format=format:'%Cgreen%h %Creset• %s (%cN, %ar)'
+	branchout = checkout -b
+	tags = tag
+	branches = branch -a
+	stashes = stash list
+	remotes = remote -v
+	prestage = diff -w --word-diff=color
+	precommit = diff --cached -w --word-diff=color --word-diff-regex='[^[:space:]<>]+'
+	move = mv
+	remove = rm
+	unmerged = branch --no-merged
+	unstash = stash pop
+	what = show -w
+	untrack = rm -r --cached
+	rewrite = rebase -i
+	amend = commit --amend
+	back = checkout "-"
+	contributors = shortlog -s -n
+	filetrail = git log --follow -p -w
+	mergetrail = log --ancestry-path --merges
+	unmerged = diff --name-only --diff-filter=U
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	grep = auto
+[core]
+	quotepath = false
+	autocrlf = false
+	excludesfile = ~/.gitignore
+	pager = less --no-init --quit-if-one-screen
+[i18n]
+	commitencoding = utf-8
+	logoutputencoding = utf-8
+[merge]
+	tool = vimdiff
+[diff]
+	tool = vimdiff
+[diff "word"]
+	textconv = catdoc -w -d utf-8
+[diff "excel"]
+	textconv = xls2csv -d utf-8
+[gui]
+	encoding=utf-8
+# mergeやdiffを外部プログラムに渡す
+#----------------------------------
+##!/bin/sh
+#'C:/Program Files/WinMerge/WinMergeU.exe' $2 $5 | cat
+#external = C:/Program Files/Git/cmd/git-diff-wrapper.sh
+[http]
+  sslVerify = false

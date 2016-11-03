@@ -1,0 +1,103 @@
+# WARNING
+# * `\C-m'にはキーバインドを寨割り当てしないこと。コマンドを実行できなくなる。
+#    Carriage Return（復帰）
+# NOTE
+# * エスケープシーケンス  
+#   + \e:   Escapeキー
+#   + \C-t: Control + t
+# * この設定ファイルはreadlineをリンクしているものすべてに影響する。
+# * sh関数を呼び出すようなキーバインドは、各シェルのrcファイルで定義すること。
+
+#
+# 日本語
+#
+set convert-meta off
+set input-meta on
+set output-meta on
+
+#
+# 表示
+#
+set bell-style none
+set mark-symlinked-directories on
+set colored-status on
+set visible-status on
+
+#
+# 補完
+#   vimの挙動となるべく合わせる
+#
+# TAB メニュー補完
+"\C-i": menu-complete
+# Shift + TAB メニュー逆順補完
+"\e[Z": menu-complete-backward
+# ファイル名補完で大文字と小文字を無視する。
+#   グロブ展開ではなく、補完時のみに影響する。
+#   つまり、rc*はRCSにマッチしないが、rcと打って補完するとRCSになる。
+set completion-ignore-case on
+# 補完時に-と_を区別せず扱う。入力が楽になる。
+set completion-map-case on
+# シンボリックリンクの場合もディレクトリに自動でスラッシュを付加する。
+# mark-directoriesがoffなら関係ない。zshはonの挙動。
+set mark-symlinked-directories on
+# ドットファイルは補完候補から除く
+set match-hidden-files off
+# メニュー補完時、1回めは補完候補一覧を表示のみ
+#  2回め以降に補完する
+set menu-complete-display-prefix on
+# 補完候補を右方向優先で表示する
+set print-completions-horizotally on
+# 補完候補をベルを鳴らさずにすぐに一覧表示する
+set show-all-if-ambiguous on
+# show-all-if-ambiguous と同じ値にするといい
+set show-all-if-unmodified on
+# カーソル位置より右側の不要部分を自動的に取り除く
+set skip-completed-text on
+
+#
+# 履歴
+#
+# 履歴を前方一致で検索する
+"\C-n": history-search-forward
+"\C-p": history-search-backward
+# 履歴移動時にカーソル位置を動かさない
+set history-preserve-point on
+
+#
+# 編集
+#
+# スラッシュ区切りで削除する
+"\C-w": unix-filename-rubout
+
+$if bash
+  #
+  # プレフィクスキー用に無効化する
+  #
+  # Line Feed（改行）。C-mも同様の機能なので不要
+  "\C-j":""
+  # 文字交換
+  "\C-t":""
+  # 実行後、コマンド再設置
+  "\C-o":""
+
+  #
+  # フィルタ
+  #
+  "\C-j\C-g":" | grep "
+  "\C-j\C-h":" | head"
+  "\C-j\C-l":" | less"
+  "\C-j\C-s":" | sort"
+  "\C-j\C-t":" | tail"
+  "\C-j\C-u":" | uniq"
+  "\C-j\C-w":" | wc -l"
+  "\C-j\C-x":" | xargs -I{} "
+  "\C-o\C-v":" | veco"
+
+  #
+  # vim関連
+  #
+  # vimに渡す。grep結果をQuickFixのソースとする
+  "\C-o\C-g":"\C-avim -q <(\C-e -n)"
+  # vimに渡す。find結果などのファイルリストを引数とする
+  "\C-o\C-f":"\C-avim $(\C-e)"
+$endif

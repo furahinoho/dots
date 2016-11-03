@@ -1,0 +1,24 @@
+startup_message off
+defencoding utf-8
+encoding utf-8 utf-8
+cjkwidth on
+altscreen on
+shell $SHELL
+hardstatus alwayslastline "[%02c] %`%-w%{=b bw}%n %t%{-}%+w"
+defscrollback 10000
+
+logfile "$HOME/Log/screen/%y%m%d.log"
+#screen -t 'vim' 0 vim $HOME/howm/Qmem-00-0000-00-00-000000.howm
+screen -t 'ranger' 0 ranger
+screen 0
+
+bind r eval 'echo "Resize window"' 'command -c resize'
+#bind -c resize ^]  command
+bind -c resize j eval 'resize +1' 'command -c resize'
+bind -c resize k eval 'resize -1' 'command -c resize'
+
+# clip board
+#bindkey -m ' ' eval 'msgwait 0' 'stuff \040' writebuf 'exec sh -c "cat /tmp/screen-exchange | xsel --input --primary"' 'msgwait 2'
+#bindkey -m Y eval 'msgwait 0' 'stuff Y' writebuf 'exec sh -c "cat /tmp/screen-exchange | xsel --input --primary"' 'msgwait 2'
+#bindkey -m y eval 'msgwait 0' 'stuff y' writebuf 'exec sh -c "cat /tmp/screen-exchange | xsel --input --primary"' 'msgwait 2'
+#bindkey -m W eval 'msgwait 0' 'stuff W' writebuf 'exec sh -c "cat /tmp/screen-exchange | xsel --input --primary"' 'msgwait 2'
